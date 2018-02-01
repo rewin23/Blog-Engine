@@ -1,5 +1,6 @@
 defmodule BlogEngine.User do
   use BlogEngine.Web, :model
+  import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
   schema "users" do
     field :username, :string
@@ -20,10 +21,15 @@ defmodule BlogEngine.User do
     struct
     |> cast(params, [:username, :email, :password, :password_confirmation])
     |> validate_required([:username, :email, :password, :password_confirmation])
+    |> hash_password
   end
 
-  def hash_password(changeset) do 
+  defp hash_password(changeset) do 
+    if password = get_change(changeset, :password) do
       changeset
-      |> put_change(:password_digest, "ABCDE")
+      |> put_change(:password_digest, hashpwsalt(password))
+    else
+      changeset
+    end
   end
 end
