@@ -21,4 +21,9 @@ defmodule BlogEngine.User do
     |> cast(params, [:username, :email, :password, :password_confirmation])
     |> validate_required([:username, :email, :password, :password_confirmation])
   end
+
+  def hash_password(changeset) do 
+      changeset
+      |> put_change(:password_digest, "ABCDE")
+  end
 end
