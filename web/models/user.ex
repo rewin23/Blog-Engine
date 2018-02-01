@@ -6,6 +6,10 @@ defmodule BlogEngine.User do
     field :email, :string
     field :password_digest, :string
 
+    #virtual Fields
+    field :password, :string, virtual: true
+    field :password_confirmation, :string, virtual: true
+
     timestamps()
   end
 
@@ -14,7 +18,7 @@ defmodule BlogEngine.User do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:username, :email, :password_digest])
-    |> validate_required([:username, :email, :password_digest])
+    |> cast(params, [:username, :email, :password, :password_confirmation])
+    |> validate_required([:username, :email, :password, :password_confirmation])
   end
 end
