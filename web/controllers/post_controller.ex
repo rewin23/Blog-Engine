@@ -19,9 +19,9 @@ defmodule BlogEngine.PostController do
 
   def create(conn, %{"post" => post_params}) do
     changeset = 
-      conn.assigns(:user)
+      conn.assigns[:user]
       |> build_assoc(:posts)
-      |> Post.changeset()
+      |> Post.changeset(post_params)
 
     case Repo.insert(changeset) do
       {:ok, _post} ->
@@ -34,18 +34,18 @@ defmodule BlogEngine.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = Repo.get!(Post, id)
+    post = Repo.get!(assoc(conn.assigns[:user], :posts), id)
     render(conn, "show.html", post: post)
   end
 
   def edit(conn, %{"id" => id}) do
-    post = Repo.get!(Post, id)
+    post = Repo.get!(assoc(conn.assigns[:user], :posts), id)
     changeset = Post.changeset(post)
     render(conn, "edit.html", post: post, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do
-    post = Repo.get!(Post, id)
+    post = Repo.get!(assoc(conn.assigns[:user], :posts), id)
     changeset = Post.changeset(post, post_params)
 
     case Repo.update(changeset) do
@@ -59,7 +59,7 @@ defmodule BlogEngine.PostController do
   end
 
   def delete(conn, %{"id" => id}) do
-    post = Repo.get!(Post, id)
+    post = Repo.get!(assoc(conn.assigns[:user], :posts), id)
 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
