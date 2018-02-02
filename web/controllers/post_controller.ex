@@ -18,7 +18,10 @@ defmodule BlogEngine.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
-    changeset = Post.changeset(%Post{}, post_params)
+    changeset = 
+      conn.assigns(:user)
+      |> build_assoc(:posts)
+      |> Post.changeset()
 
     case Repo.insert(changeset) do
       {:ok, _post} ->
