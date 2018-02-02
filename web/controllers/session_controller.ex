@@ -26,9 +26,7 @@ defmodule BlogEngine.SessionController do
   end
 
   defp sign_in(user, password, conn) when is_nil(user) do
-  	conn
-  	|> put_flash(:error, "Invalid username/password combination!")
-  	|> redirect(to: page_path(conn, :index))
+  	failed_login(conn)
   end
 
   defp sign_in(user, password, conn) do
@@ -37,10 +35,7 @@ defmodule BlogEngine.SessionController do
   		|> put_session(:current_user, %{id: user.id, username: user.username})
   		|> redirect(to: page_path(conn, :index))
   	else
-  		conn
-  		|> put_session(:current_user, nil)
-  		|> put_flash(:error, "Invalid username/password combination S_S")
-  		|> redirect(to: page_path(conn, :index))
+  		failed_login(conn)
   	end
   end
 
