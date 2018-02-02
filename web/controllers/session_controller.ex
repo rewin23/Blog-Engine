@@ -1,6 +1,6 @@
 defmodule BlogEngine.SessionController do
   use BlogEngine.Web, :controller
-  import Comeonin.Bcrypt, only: [checkpw: 2]
+  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
   alias BlogEngine.User
 
   def new(conn, _params) do
@@ -8,9 +8,13 @@ defmodule BlogEngine.SessionController do
   end
 
 
-  def create(conn, %{"user" => user_params}) do
-  	Repo.get_by(User, username: user_params["username"])
-  	|> sign_in(user_params["password"], conn)
+  def create(conn, %{"user" => %{"username" => username, "password" => password}}) when not is_nil (username) and not is_nil(password) do
+  	Repo.get_by(User, username: username)
+  	|> sign_in(password, conn)
+  end
+
+  def create(conn, _) do
+    failed_login(conn)
   end
 
 
@@ -38,5 +42,14 @@ defmodule BlogEngine.SessionController do
   		|> put_flash(:error, "Invalid username/password combination S_S")
   		|> redirect(to: page_path(conn, :index))
   	end
+  end
+
+  defp failed_login(conn) do
+    dummy_checkpw()
+    conn
+    |>put_session(:current_user, nil)
+    |>put_flash(:error, "Invalid username/password combination :(")
+    |>redirect(to: page_path(conn, :index))
+    |>halt()
   end
 end
