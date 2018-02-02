@@ -10,7 +10,10 @@ defmodule BlogEngine.PostController do
   end
 
   def new(conn, _params) do
-    changeset = Post.changeset(%Post{})
+    changeset = 
+      conn.assigns[:user]
+      |> build_assoc(:posts)
+      |> Post.changeset()
     render(conn, "new.html", changeset: changeset)
   end
 
