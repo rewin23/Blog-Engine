@@ -7,6 +7,7 @@ defmodule BlogEngine.User do
     field :email, :string
     field :password_digest, :string
     has_many :posts, BlogEngine.Post
+    belongs_to :role, BlogEngine.Role
 
     #virtual Fields
     field :password, :string, virtual: true

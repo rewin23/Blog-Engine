@@ -4,6 +4,7 @@ defmodule BlogEngine.Role do
   schema "roles" do
     field :name, :string
     field :admin, :boolean, default: false
+    has_many :users, BlogEngine.User
 
     timestamps()
   end
