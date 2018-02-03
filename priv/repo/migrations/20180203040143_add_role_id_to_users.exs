@@ -3,7 +3,7 @@ defmodule BlogEngine.Repo.Migrations.AddRoleIdToUsers do
 
   def change do
   	alter table(:users) do
-  	  add(:role_id) reference(:roles)
+  	  add(:role_id), references(:roles)
   	end
   	create index(:users, [:role_id])
   end
