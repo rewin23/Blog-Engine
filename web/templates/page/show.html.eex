@@ -1,0 +1,7 @@
+<h2><%= @post.title %></h2>
+
+<p>
+  <%= @post.body %>
+</p>
+<%= link "Back", to: page_path(@conn, :index) %>
+
