@@ -16,7 +16,7 @@ defmodule BlogEngine.Router do
   scope "/", BlogEngine do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
+    resources "/", PageController, only: [:index, :show]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     resources "/users", UserController do
       resources "/posts", PostController
