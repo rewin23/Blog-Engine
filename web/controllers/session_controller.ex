@@ -8,7 +8,7 @@ defmodule BlogEngine.SessionController do
   end
 
 
-  def create(conn, %{"user" => %{"username" => username, "password" => password}}) when not is_nil (username) and not is_nil(password) do
+  def create(conn, %{"user" => %{"username" => username, "password" => password}}) when not is_nil(username) and not is_nil(password) do
   	Repo.get_by(User, username: username)
   	|> sign_in(password, conn)
   end
@@ -32,7 +32,7 @@ defmodule BlogEngine.SessionController do
   defp sign_in(user, password, conn) do
   	if checkpw(password, user.password_digest) do
   		conn
-  		|> put_session(:current_user, %{id: user.id, username: user.username})
+  		|> put_session(:current_user, %{id: user.id, username: user.username, role_id: user.role_id})
   		|> redirect(to: page_path(conn, :index))
   	else
   		failed_login(conn)
