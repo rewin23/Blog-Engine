@@ -25,7 +25,7 @@ defmodule BlogEngine.SessionController do
   	|> redirect(to: page_path(conn, :index))
   end
 
-  defp sign_in(user, password, conn) when is_nil(user) do
+  defp sign_in(user, password, conn) when is_nil(user) or is_nil(password) do
   	failed_login(conn)
   end
 
